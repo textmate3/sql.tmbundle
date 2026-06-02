@@ -28,8 +28,8 @@ module JSON
       ARRAY_CLOSE           = /\]/
       PAIR_DELIMITER        = /:/
       COLLECTION_DELIMITER  = /,/
-      TRUE                  = /true/
-      FALSE                 = /false/
+      TRUE_RE               = /true/
+      FALSE_RE              = /false/
       NULL                  = /null/
       IGNORE                = %r(
         (?:
@@ -143,9 +143,9 @@ module JSON
           Float(self[1])
         when scan(INTEGER)
           Integer(self[1])
-        when scan(TRUE)
+        when scan(TRUE_RE)
           true
-        when scan(FALSE)
+        when scan(FALSE_RE)
           false
         when scan(NULL)
           nil
