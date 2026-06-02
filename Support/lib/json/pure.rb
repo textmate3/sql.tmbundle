@@ -1,3 +1,4 @@
+# encoding: ASCII-8BIT
 require 'json/common'
 require 'json/pure/parser'
 require 'json/pure/generator'
