@@ -26,7 +26,7 @@ NO_TABLE = '__none__'
 @options.database.name     = nil
 @options.database.table    = nil
 
-require "#{ENV["TM_SUPPORT_PATH"]}/lib/osx/plist" if ENV["TM_SUPPORT_PATH"]
+require "#{ENV["TM_SUPPORT_PATH"]}/private/plist" if ENV["TM_SUPPORT_PATH"]
 
 # Parse commandline options
 begin

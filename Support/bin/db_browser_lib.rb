@@ -188,7 +188,7 @@ end
 
 def get_connection_settings(options)
   begin
-    plist = open(File.expand_path("~/Library/Preferences/#{ENV['TM_APP_IDENTIFIER'] || 'com.macromates.textmate'}.plist")) { |io| OSX::PropertyList.load(io) }
+    plist = open(File.expand_path("~/Library/Preferences/#{ENV['TM_APP_IDENTIFIER'] || 'com.macromates.textmate'}.plist")) { |io| Plist.load(io) }
 
     unless connection = plist['SQL Connections'].find { |conn| conn['title'] == ENV['TM_SQL_CONNECTION'] }
       connection = plist['SQL Connections'][plist['SQL Active Connection'].first.to_i]
@@ -215,13 +215,14 @@ end
 def get_connection_password(options)
   proto = options.server == 'postgresql' ? 'pgsq' : 'mysq'
 
-  OSX::Keychain::internet_password_for :account => options.user, :server => options.host, :protocol => proto
+  result = %x{security find-internet-password -g -a "#{options.user}" -s "#{options.host}" -r "#{proto}" 2>&1 >/dev/null}
+  result =~ /^password: "(.*)"$/ ? $1 : nil
 end
 
 def store_connection_password(options, password)
   proto = @options.database.server == 'postgresql' ? 'pgsq' : 'mysq'
 
-  OSX::Keychain::set_internet_password_for :account => options.user, :server => options.host, :protocol => proto, :password => password
+  %x{security add-internet-password -U -a "#{options.user}" -s "#{options.host}" -r "#{proto}" -w "#{password}"}
 end
 
 def get_connection
